@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUpload } from '@fortawesome/free-solid-svg-icons';
 import PaymentModal from './components/PaymentModal'; // 引入 PaymentModal 组件
+import { useRouter } from 'next/navigation'; // 引入路由
 
 export default function StartTutoring() {
     const [subject, setSubject] = useState(''); // 科目或问题输入
@@ -13,15 +14,25 @@ export default function StartTutoring() {
     const [description, setDescription] = useState(''); // 问题描述
     const [uploadedFileName, setUploadedFileName] = useState(''); // 上传的文件名
     const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false); // 控制模态框的状态
-    const [isPaymentBound, setIsPaymentBound] = useState(false); // 管理员开关，默认未绑定付款方式
+    const [isPaymentBound, setIsPaymentBound] = useState(false); // 模拟是否已绑定支付方式
+    const router = useRouter(); // 使用路由进行页面跳转
 
     const handleSubmit = () => {
-        // 提交逻辑：如果未绑定付款方式，则显示支付方式模态框
         if (!isPaymentBound && subject && price) {
             setIsPaymentModalOpen(true); // 打开支付模态框
         } else {
             console.log('Payment is already bound. Proceed with tutoring request.');
-            // 其他处理逻辑，比如跳转到下一页面
+
+            // 使用 URLSearchParams 构建查询参数
+            const queryParams = new URLSearchParams({
+                subject: subject,
+                price: price,
+                language: language,
+                paymentMethod: 'Visa ****1234', // 模拟绑定的支付方式
+            }).toString();
+
+            // 跳转到 Review 页面并传递查询参数
+            router.push(`/review?${queryParams}`);
         }
     };
 
@@ -192,6 +203,7 @@ export default function StartTutoring() {
         </div>
     );
 }
+//消息不会传递给Review，这个Bug日后再说。
 
 
 
