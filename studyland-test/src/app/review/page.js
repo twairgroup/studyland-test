@@ -1,45 +1,95 @@
-"use client"; // Next.js 客户端组件
+"use client";
 
 import React from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCreditCard, faEdit } from '@fortawesome/free-solid-svg-icons';
 
-export default function Review({ subject, price, language, paymentMethod }) {
+export default function Review() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+
+    const subject = searchParams.get('subject') || 'N/A';
+    const topic = searchParams.get('topic') || 'N/A';
+    const price = searchParams.get('price') || 'N/A';
+    const language = searchParams.get('language') || 'N/A';
+    const paymentMethod = searchParams.get('paymentMethod') || 'Visa **** 1234';
 
     const handleConfirm = () => {
-        // 处理确认逻辑，点击确认后进入匹配系统
+        // Navigate directly to the matching page without query parameters
         router.push('/matching');
     };
 
+    const handleChangePaymentMethod = () => {
+        // Simulate changing payment method
+        alert('Payment method change functionality is not implemented in this simulation.');
+    };
+
     return (
-        <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-6">
-            <h1 className="text-3xl font-bold mb-6">Review Your Tutoring Request</h1>
+        <div className="min-h-screen bg-white p-8 flex flex-col items-center">
+            <div className="bg-gray-100 shadow-2xl rounded-3xl p-10 w-full max-w-2xl">
+                <div className="text-center mb-10">
+                    <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
+                        Review Your Tutoring Request
+                    </h1>
+                    <p className="text-lg text-gray-600">
+                        Please confirm the details before proceeding
+                    </p>
+                </div>
 
-            <div className="w-full max-w-md bg-white p-6 rounded-lg shadow-lg mb-6">
-                <div className="mb-4">
-                    <h2 className="text-xl font-semibold">Subject:</h2>
-                    <p>{subject}</p>
+                <div className="space-y-6">
+                    {/* Subject */}
+                    <div className="flex items-center justify-between">
+                        <span className="text-xl font-semibold">Subject:</span>
+                        <span className="text-xl text-gray-700">{subject}</span>
+                    </div>
+
+                    {/* Topic */}
+                    <div className="flex items-center justify-between">
+                        <span className="text-xl font-semibold">Topic:</span>
+                        <span className="text-xl text-gray-700">{topic}</span>
+                    </div>
+
+                    {/* Price */}
+                    <div className="flex items-center justify-between">
+                        <span className="text-xl font-semibold">Price:</span>
+                        <span className="text-xl text-gray-700">${price}</span>
+                    </div>
+
+                    {/* Language */}
+                    <div className="flex items-center justify-between">
+                        <span className="text-xl font-semibold">Language:</span>
+                        <span className="text-xl text-gray-700">{language}</span>
+                    </div>
+
+                    {/* Payment Method */}
+                    <div className="flex items-center justify-between">
+                        <span className="text-xl font-semibold">Payment Method:</span>
+                        <div className="flex items-center space-x-4">
+                            <span className="text-xl text-gray-700">
+                                <FontAwesomeIcon icon={faCreditCard} className="mr-2" />
+                                {paymentMethod}
+                            </span>
+                            <button
+                                onClick={handleChangePaymentMethod}
+                                className="text-blue-500 hover:text-blue-600 focus:outline-none"
+                            >
+                                <FontAwesomeIcon icon={faEdit} className="mr-1" />
+                                Change
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div className="mb-4">
-                    <h2 className="text-xl font-semibold">Price:</h2>
-                    <p>${price}</p>
-                </div>
-                <div className="mb-4">
-                    <h2 className="text-xl font-semibold">Language:</h2>
-                    <p>{language}</p>
-                </div>
-                <div className="mb-4">
-                    <h2 className="text-xl font-semibold">Payment Method:</h2>
-                    <p>{paymentMethod ? paymentMethod : 'No payment method bound'}</p>
-                </div>
+
+                <button
+                    onClick={handleConfirm}
+                    className="mt-10 w-full py-4 rounded-full text-2xl font-semibold shadow-lg bg-blue-500 text-white hover:bg-blue-600 transition duration-200"
+                >
+                    Confirm and Find Tutor
+                </button>
             </div>
-
-            <button
-                onClick={handleConfirm}
-                className="bg-blue-500 text-white py-2 px-6 rounded-lg hover:bg-blue-600 transition"
-            >
-                Confirm and Find Tutor
-            </button>
         </div>
     );
 }
+
+
